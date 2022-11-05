@@ -1,78 +1,111 @@
 const axios  = require('axios');
-const test = require('../../model/auth');
-// const _ = require('lodash');
+const test = require('../../model/inventory');
 const sql = require("./index");
 const utils = require('../utils');
 const logger = require('../logger').logger;
 const config = require('config');
-const { create } = require('lodash');
-const bcrypt = require('bcrypt')
 
-var authList = (arg) => {
+//===================== Warehouse
+var listWarehouse = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
-       ///....codeGoeshere
-        let data = { "name": "Syukran"}
-        let query = `SELECT *  FROM [${config.db.database}].[dbo].[user]`
+        let data = ``
+        let query = ``
 
-       sql.executeQuery(query, data)
+        sql.executeQuery(query, data)
 			.then(records => {
                 return resolve(records)
             })
-
-
-            
-    // return data
-
-
     });
 }
-
-
-var createUser = (arg) => {
+var createWarehouse = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
-       
-        if (arg.body.username && arg.body.password) {
-            let hashedPassword = await bcrypt.hash(arg.body.password,10)
+        let data = ``
+        let query = ``
 
-            let query = `SELECT * FROM [${config.db.database}].[dbo].[user] WHERE username = @username`
-            let data = {
-                "username" : arg.body.username,
-            }
-            sql.executeQuery(query, data)
-                        .then(records => {
-                            console.log('Total records ==>' + records.length)
-                            if (records.length === 0) {
-                                let query = `INSERT INTO [${config.db.database}].[dbo].[user] (username, password) VALUES (@username, @password)`
-                                let data = {
-                                    "username" : arg.body.username,
-                                    "password" : hashedPassword
-                                }
-                                sql.executeQuery(query, data)
-                                    .then( ()=> {
-                                        resolve({ 
-                                            "mesage" : "Successful"})
-                                    })
-                                    .catch(err => { console.log(err.message)})
-                            } else {
-                                resolve({
-                                    "message" : "User already exist!"
-                                })
-                            }
-                        })
-                        .catch(err => { 
-                            console.log(err.message)
-                        })
+        sql.executeQuery(query, data)
+			.then(records => {
+                return resolve(records)
+            })
+    });
+}
+var editWarehouse = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let data = ``
+        let query = ``
 
-
-           
-            
-        }
-
+        sql.executeQuery(query, data)
+			.then(records => {
+                return resolve(records)
+            })
     });
 }
 
+var removeWarehouse = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let data = ``
+        let query = ``
+
+        sql.executeQuery(query, data)
+			.then(records => {
+                return resolve(records)
+            })
+    });
+}
+//===================== Product
+var listProduct = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let data = ``
+        let query = ``
+
+        sql.executeQuery(query, data)
+			.then(records => {
+                return resolve(records)
+            })
+    });
+}
+var createProduct = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let data = ``
+        let query = ``
+
+        sql.executeQuery(query, data)
+			.then(records => {
+                return resolve(records)
+            })
+    });
+}
+var editProduct = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let data = ``
+        let query = ``
+
+        sql.executeQuery(query, data)
+			.then(records => {
+                return resolve(records)
+            })
+    });
+}
+
+var removeProduct = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let data = ``
+        let query = ``
+
+        sql.executeQuery(query, data)
+			.then(records => {
+                return resolve(records)
+            })
+    });
+}
 
 module.exports = {
-    authList :  authList,
-    createUser : createUser
+    listWarehouse : listWarehouse,
+    createWarehouse : createWarehouse,
+    editWarehouse :  editWarehouse,
+    removeWarehouse : removeWarehouse,
+
+    listProduct : listProduct,
+    createProduct : createProduct,
+    editProduct : editProduct,
+    removeProduct : removeProduct
 }

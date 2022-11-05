@@ -1,5 +1,5 @@
 {
-    "AUTH_SERVICE_PORT" : 3000,
+    "INVENTORY_SERVICE_PORT" : 4000,
     "ACCESS_CONTROL_ALLOW_ORIGIN": "*",
     "AUTH_KEY": "",
     "db": {

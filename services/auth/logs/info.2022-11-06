@@ -205,3 +205,18 @@
 {"level":"info","message":{"message":{"body":{"password":"bobashjag","username":"Amirul Ahmad"},"info":"START - authListCtrl","route":"createUserCtrl"},"pid":6668,"time":"06, Nov 2022, 02:33:43 6250"}}
 {"level":"info","message":{"message":{"data":{"message":"User already exist!"},"path":"createUser"},"pid":6668,"time":"06, Nov 2022, 02:33:43 6970"}}
 {"level":"info","message":{"message":{"benchmark":73.1432,"info":"END - createUserCtrl with success","results":{"code":200,"data":{"message":"User already exist!"},"text":"success"},"route":"createUserCtrl"},"pid":6668,"time":"06, Nov 2022, 02:33:43 6980"}}
+{"level":"info","message":{"message":"NODE_ENV: dev","pid":13204,"time":"06, Nov 2022, 02:34:27 0460"}}
+{"level":"info","message":{"message":"Auth Services start at port 3000","pid":13204,"time":"06, Nov 2022, 02:34:27 3060"}}
+{"level":"info","message":{"message":{"dbName":"warehouse_database","dbServer":"localhost","info":"Connection pool created","path":"indexSQL/connect"},"pid":13204,"time":"06, Nov 2022, 02:34:27 3090"}}
+{"level":"info","message":{"message":{"body":{"password":"bobashjag","username":"Amirul Ahmad"},"info":"START - authListCtrl","route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:30 5030"}}
+{"level":"info","message":{"message":{"data":{"mesage":"Successful"},"path":"createUser"},"pid":13204,"time":"06, Nov 2022, 02:34:30 5800"}}
+{"level":"info","message":{"message":{"benchmark":76.9301,"info":"END - createUserCtrl with success","results":{"code":200,"data":{"mesage":"Successful"},"text":"success"},"route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:30 5800"}}
+{"level":"info","message":{"message":{"body":{"password":"bobashjag","username":"Amirul Ahmad"},"info":"START - authListCtrl","route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:33 2770"}}
+{"level":"info","message":{"message":{"data":{"message":"User already exist!"},"path":"createUser"},"pid":13204,"time":"06, Nov 2022, 02:34:33 3390"}}
+{"level":"info","message":{"message":{"benchmark":61.7352,"info":"END - createUserCtrl with success","results":{"code":200,"data":{"message":"User already exist!"},"text":"success"},"route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:33 3390"}}
+{"level":"info","message":{"message":{"body":{"password":"bobashjag","username":"Amirul Ahmad"},"info":"START - authListCtrl","route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:34 4790"}}
+{"level":"info","message":{"message":{"data":{"message":"User already exist!"},"path":"createUser"},"pid":13204,"time":"06, Nov 2022, 02:34:34 5390"}}
+{"level":"info","message":{"message":{"benchmark":60.4171,"info":"END - createUserCtrl with success","results":{"code":200,"data":{"message":"User already exist!"},"text":"success"},"route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:34 5390"}}
+{"level":"info","message":{"message":{"body":{"password":"bobashjag","username":"Amirul Ahmad"},"info":"START - authListCtrl","route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:35 2870"}}
+{"level":"info","message":{"message":{"data":{"message":"User already exist!"},"path":"createUser"},"pid":13204,"time":"06, Nov 2022, 02:34:35 3480"}}
+{"level":"info","message":{"message":{"benchmark":61.2198,"info":"END - createUserCtrl with success","results":{"code":200,"data":{"message":"User already exist!"},"text":"success"},"route":"createUserCtrl"},"pid":13204,"time":"06, Nov 2022, 02:34:35 3480"}}

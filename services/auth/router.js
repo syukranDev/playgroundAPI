@@ -34,9 +34,9 @@ app.use('/app/portal/auth/', router);
 router.route('/list')
 .get((...args) => controller.list(...args))
 
-
 router.route('/createUser')
 .post((...args) => controller.createUser(...args))
+
 
 
 

@@ -1,6 +1,6 @@
 ## TODO List
 
-### User API
+### Microservices - User API
 ```
 [X] POST: app/portal/user/list 
 [X] POST: app/portal/user/create 
@@ -9,7 +9,7 @@
     [ ] status = 1 - Approved @ Active 
     [ ] status = 2 - Deactivated  
 ```
-### Warehouse API
+### Microservices - User API
 ```
 [X] GET: app/portal/warehouse/list  
 [X] POST: app/portal/warehuse/add
@@ -17,7 +17,7 @@
 [ ] POST: app/portal/warehouse/remove/:warehouseId 
 ```
 
-### Product API
+### Microservices - User API
 ```
 [x] GET: app/portal/product/list
 [x] POST: app/portal/product/add 
@@ -26,9 +26,11 @@
 ```
 
 
-### Misc
+### Microservices - User API
 ```
 [ ] Request schema body validation
 [ ] Logger for better debugging
 [X] Hash user's password
+[ ] local db .csv
 ```
+

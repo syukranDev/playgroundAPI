@@ -2,7 +2,7 @@
 
 ### Microservices - User API
 ```
-[X] POST: app/portal/user/list 
+[X] GET: app/portal/user/list 
 [X] POST: app/portal/user/create 
     [X] status = 0 - Request level, awating approve by Admin 
 [ ] POST: app/portal/user/edit/:username/:status 
@@ -11,12 +11,12 @@
 ```
 ### Microservices - Inventory API (Warehouse and product)
 ```
-[X] GET: app/portal/warehouse/list  
+[X] POST: app/portal/warehouse/list 
 [X] POST: app/portal/warehouse/add
 [ ] POST: app/portal/warehouse/edit/:warehouseId 
 [ ] POST: app/portal/warehouse/remove/:warehouseId 
 
-[x] GET: app/portal/product/list
+[x] POST: app/portal/product/list
 [x] POST: app/portal/product/add 
 [ ] POST: app/portal/product/edit/:productId 
 [ ] POST: app/portal/product/remove/:productId 

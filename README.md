@@ -9,15 +9,15 @@
     [ ] status = 1 - Approved @ Active 
     [ ] status = 2 - Deactivated  
 ```
-### Microservices - User API
+### Microservices - Warehouse API
 ```
 [X] GET: app/portal/warehouse/list  
-[X] POST: app/portal/warehuse/add
+[X] POST: app/portal/warehouse/add
 [ ] POST: app/portal/warehouse/edit/:warehouseId 
 [ ] POST: app/portal/warehouse/remove/:warehouseId 
 ```
 
-### Microservices - User API
+### Microservices - Product API
 ```
 [x] GET: app/portal/product/list
 [x] POST: app/portal/product/add 
@@ -26,7 +26,7 @@
 ```
 
 
-### Microservices - User API
+### etc
 ```
 [ ] Request schema body validation
 [ ] Logger for better debugging

@@ -1,20 +1,58 @@
-const axios  = require('axios');
+// const axios  = require('axios');
 const test = require('../../model/inventory');
 const sql = require("./index");
 const utils = require('../utils');
 const logger = require('../logger').logger;
 const config = require('config');
 
-//===================== Warehouse
+//===================== Warehouse APIs
 var listWarehouse = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
-       ///....codeGoeshere
+        var totalRec = 0, pageCount = 0;
+		var pageSize  = arg.body.page_size ? arg.body.page_size : 10
+        var start = 0;
+		var currentPage = 1;
+	
+        let query = `SELECT COUNT(*) as total_record FROM [${config.db.database}].[dbo].[warehouse]`
         let data = {}
-        let query = `SELECT *  FROM [${config.db.database}].[dbo].[warehouse]`
-
-       sql.executeQuery(query, data)
+        
+        sql.executeQuery(query, data)
 			.then(records => {
-               return resolve(records)
+                totalRec = records[0].total_record;
+                pageCount = Math.ceil(totalRec /  pageSize);
+                if (typeof arg.body.page_no !== 'undefined'){
+                    currentPage = arg.body.page_no;
+                }
+                
+                if(currentPage >1){
+                    start = (currentPage - 1) * pageSize;
+                }
+
+                let query = `SELECT *  FROM [${config.db.database}].[dbo].[warehouse] ORDER BY created_date DESC OFFSET @start ROWS FETCH NEXT @pageSize ROWS ONLY`
+                let data = { "start" : start, "pageSize": pageSize}
+        
+                sql.executeQuery(query, data)
+                    .then(records => {
+                        let resObj = {
+                            "list" : records,
+                            "total_records" : totalRec
+                        }
+                        return resolve(resObj)
+                    })
+
+            }).catch(err => {
+                logger.error({
+                    path: "dbQueries/listWarehouse/catch",
+                    query: query,
+                    queryData: data,
+                    message: err && err.message,
+                    stack: err && err.stack
+                })
+                return reject({
+                    statusCode: 500,
+                    message: "System Error: Unable to reach listWarehouse API."
+                });
+
             })
     });
 }
@@ -22,39 +60,80 @@ var listWarehouse = (arg) => {
 
 var createWarehouse = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
-        let data = {}
-        let query = ``
+        let query = `SELECT * FROM [${config.db.database}].[dbo].[warehouse] WHERE warehouseName=@warehouseName`
+        let data = {
+            "warehouseName" : arg.body.warehouseName
+        }
 
-        sql.executeQuery(query, data)
-			.then(records => {
-                return resolve(records)
-            })
+        if (arg.body.warehouseName) {
+            sql.executeQuery(query, data)
+                .then(records => {
+                    if (records.length ===0) {
+                        let query = `INSERT INTO [${config.db.database}].[dbo].[warehouse] (warehouseName, state, total_product, created_date, updated_date) 
+                                     VALUES (@warehouseName, @state, @total_product, GETDATE(), GETDATE())`
+                        let data = {
+                            "warehouseName" : arg.body.warehouseName,
+                            "state" : arg.body.state,
+                            "total_product" : "0" //set to "0" as new warehouse doesnt have any stock registered && in db set as string.
+                        }
+
+                        sql.executeQuery(query, data)
+                        .then(() => {
+                            let resObj = {
+                                "message" : "New warehouse added!"
+                            }
+                            return resolve(resObj)
+                        }).catch(err => { 
+                            console.log(err.message)
+                        })
+
+                    } else {
+                        resolve({ "message" : "Warehouse already exist!"})
+                    }
+    
+                }).catch(err => { 
+                    logger.error({
+                        path: "dbQueries/createWarehouse/catch",
+                        query: query,
+                        queryData: data,
+                        message: err && err.message,
+                        stack: err && err.stack
+                    });
+
+                    return reject({
+                        statusCode: 500,
+                        message: "System Error: Unable to reach createWarehouse API."
+                    });
+                })
+        }
     });
 }
-var editWarehouse = (arg) => {
-    return promise = new Promise(async (resolve, reject) => {
-        let data = {}
-        let query = ``
 
-        sql.executeQuery(query, data)
-			.then(records => {
-                return resolve(records)
-            })
-    });
-}
+// var editWarehouse = (arg) => {
+//     return promise = new Promise(async (resolve, reject) => {
+//         let data = {}
+//         let query = ``
 
-var removeWarehouse = (arg) => {
-    return promise = new Promise(async (resolve, reject) => {
-        let data = {}
-        let query = ``
+//         sql.executeQuery(query, data)
+// 			.then(records => {
+//                 return resolve(records)
+//             })
+//     });
+// }
 
-        sql.executeQuery(query, data)
-			.then(records => {
-                return resolve(records)
-            })
-    });
-}
-//===================== Product
+// var removeWarehouse = (arg) => {
+//     return promise = new Promise(async (resolve, reject) => {
+//         let data = {}
+//         let query = ``
+
+//         sql.executeQuery(query, data)
+// 			.then(records => {
+//                 return resolve(records)
+//             })
+//     });
+// }
+
+//===================== Product APIs
 var listProduct = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
         var totalRec = 0, pageCount = 0;
@@ -89,9 +168,23 @@ var listProduct = (arg) => {
                         return resolve(resObj)
                     })
 
+            }).catch(err => {
+                logger.error({
+                    path: "dbQueries/listProduct/catch",
+                    query: query,
+                    queryData: data,
+                    message: err && err.message,
+                    stack: err && err.stack
+                });
+
+                return reject({
+                    statusCode: 500,
+                    message: "System Error: Unable to reach listProduct API."
+                });
             })
     });
 }
+
 var createProduct = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
         let query = `SELECT * FROM [${config.db.database}].[dbo].[stock] WHERE stock_name=@stockName`
@@ -149,44 +242,55 @@ var createProduct = (arg) => {
                     }
     
                 }).catch(err => { 
-                    console.log(err.message)
+                    logger.error({
+                        path: "dbQueries/createProduct/catch",
+                        query: query,
+                        queryData: data,
+                        message: err && err.message,
+                        stack: err && err.stack
+                    });
+
+                    return reject({
+                        statusCode: 500,
+                        message: "System Error: Unable to reach createProduct API."
+                    });
                 })
         }
     });
 }
 
-var editProduct = (arg) => {
-    return promise = new Promise(async (resolve, reject) => {
-        let data = {}
-        let query = ``
+// var editProduct = (arg) => {
+//     return promise = new Promise(async (resolve, reject) => {
+//         let data = {}
+//         let query = ``
 
-        sql.executeQuery(query, data)
-			.then(records => {
-                return resolve(records)
-            })
-    });
-}
+//         sql.executeQuery(query, data)
+// 			.then(records => {
+//                 return resolve(records)
+//             })
+//     });
+// }
 
-var removeProduct = (arg) => {
-    return promise = new Promise(async (resolve, reject) => {
-        let data = {}
-        let query = ``
+// var removeProduct = (arg) => {
+//     return promise = new Promise(async (resolve, reject) => {
+//         let data = {}
+//         let query = ``
 
-        sql.executeQuery(query, data)
-			.then(records => {
-                return resolve(records)
-            })
-    });
-}
+//         sql.executeQuery(query, data)
+// 			.then(records => {
+//                 return resolve(records)
+//             })
+//     });
+// }
 
 module.exports = {
     listWarehouse : listWarehouse,
     createWarehouse : createWarehouse,
-    editWarehouse :  editWarehouse,
-    removeWarehouse : removeWarehouse,
+    // editWarehouse :  editWarehouse,
+    // removeWarehouse : removeWarehouse,
 
     listProduct : listProduct,
     createProduct : createProduct,
-    editProduct : editProduct,
-    removeProduct : removeProduct
+    // editProduct : editProduct,
+    // removeProduct : removeProduct
 }

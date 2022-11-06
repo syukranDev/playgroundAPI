@@ -36,8 +36,8 @@ module.exports = class test {
         })
         .catch(reason => {
           logger.error({
-            path: 'listWarehouse catch',
-            info: 'listWarehouse failed',
+            path: 'createWarehouse catch',
+            info: 'createWarehouse failed',
             reason: reason
           })
           return reject(reason);
@@ -50,15 +50,15 @@ module.exports = class test {
       return sql.listProduct(req)
         .then(results => {
           logger.info({
-            path: 'listWarehouse',
+            path: 'listProduct',
             data: results
           });  
           return resolve(results);
         })
         .catch(reason => {
           logger.error({
-            path: 'listWarehouse catch',
-            info: 'listWarehouse failed',
+            path: 'listProduct catch',
+            info: 'listProduct failed',
             reason: reason
           })
           return reject(reason);
@@ -71,15 +71,15 @@ module.exports = class test {
       return sql.createProduct(req)
         .then(results => {
           logger.info({
-            path: 'createWarehouse',
+            path: 'createProduct',
             data: results
           });  
           return resolve(results);
         })
         .catch(reason => {
           logger.error({
-            path: 'listWarehouse catch',
-            info: 'listWarehouse failed',
+            path: 'createProduct catch',
+            info: 'createProduct failed',
             reason: reason
           })
           return reject(reason);

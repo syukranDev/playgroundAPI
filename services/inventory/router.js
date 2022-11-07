@@ -39,7 +39,7 @@ router.route('/product/list')
 router.route('/product/add')
 .post((...args) => controller.createProduct(...args))
 
-router.route('/product/remove/:warehouse_id')
+router.route('/product/remove/')
 .get((...args) => controller.list(...args))
 
 module.exports = app

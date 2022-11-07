@@ -59,8 +59,6 @@ const createProductCtrl = (arg) => {
   });
 }
 
-// Warehouse
-
 module.exports.listWarehouse = function listWarehouse(req, res) {
 	let start_benchmark = process.hrtime();
 	logger.info({
@@ -114,9 +112,6 @@ module.exports.removeWarehouse = function removeWarehouse(req, res) {
 		return res.status(reason.statusCode).send(reason);
 	})
 };
-
-
-// Products
 
 module.exports.listProduct = function listProduct(req, res) {
 	let start_benchmark = process.hrtime();

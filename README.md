@@ -1,5 +1,5 @@
 ### How to use
-
+```
 1. Create local database with and import data from attached .csv
 2. git clone <repo link>
 3. npm i 
@@ -14,7 +14,7 @@
     -node index.js
 
 5. use curl or postman to test below microservices API.   
-
+```
 ### Microservices - User API
 ```
 1. API: app/portal/user/list 

@@ -1,27 +1,31 @@
-##TODO
+## TODO List
 
-### User API
-[X] POST: app/portal/user/list <br>
-[X] POST: app/portal/user/create <br>
-    * [X] status = 0 - Request level, awating approve by Admin
-[ ] POST: app/portal/user/edit/:username/:status <br>
-    * [ ] status = 1 - Approved @ Active
-    * [ ] status = 2 - Deactivated 
+### Microservices - User API
+```
+[X] GET: app/portal/user/list 
+[X] POST: app/portal/user/create 
+    [X] status = 0 - Request level, awating approve by Admin 
+[ ] POST: app/portal/user/edit/:username/:status 
+    [ ] status = 1 - Approved @ Active 
+    [ ] status = 2 - Deactivated  
+```
+### Microservices - Inventory API (Warehouse and product)
+```
+[X] POST: app/portal/warehouse/list 
+[X] POST: app/portal/warehouse/add
+[ ] POST: app/portal/warehouse/edit/:warehouseId 
+[ ] POST: app/portal/warehouse/remove/:warehouseId 
 
-### Warehouse API
-[X] GET: app/portal/warehouse/list <br>  
-[X] POST: app/portal/warehuse/add <br>
-[ ] POST: app/portal/warehouse/edit/:warehouseId <br>
-[ ] POST: app/portal/warehouse/remove/:warehouseId <br>
-
-### Product API
-[x] GET: app/portal/product/list <br>
-[x] POST: app/portal/product/add <br>
-[ ] POST: app/portal/product/edit/:productId <br>
-[ ] POST: app/portal/product/remove/:productId <br>
-
-
-### Misc
+[x] POST: app/portal/product/list
+[x] POST: app/portal/product/add 
+[ ] POST: app/portal/product/edit/:productId 
+[ ] POST: app/portal/product/remove/:productId 
+```
+### etc
+```
 [ ] Request schema body validation
 [ ] Logger for better debugging
-[X] Hash password
+[X] Hash user's password
+[ ] local db .csv
+```
+

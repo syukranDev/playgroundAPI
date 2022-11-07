@@ -285,18 +285,18 @@ var removeProduct = (arg) => {
             let totalUpdatedStock = 0;
             sql.executeQuery(query, data)
                 .then(records => {
-                    if (records.length ===0) {
+                    if (records.length === 1) {
                         let query = `DELETE FROM [${config.db.database}].[dbo].[stock] 
-                                     WHERE stock_name=@stockName, stock_warehouse=@stockWarehouse`
+                                     WHERE stock_name=@stockName AND stock_warehouse=@stockWarehouse`
                         let data = {
                             "stockName" : arg.body.stockName,
-                            "stockWarehouse" : arg.body.stockWarehouse,
+                            "stockWarehouse" : arg.body.stockWarehouse
                         }
 
                         sql.executeQuery(query, data)
                         .then(() => {
                             let query = `SELECT * FROM [${config.db.database}].[dbo].[warehouse] WHERE warehouseName=@warehouseName`
-                            let data = {"warehouseName" : arg.body.stockWarehouse}
+                            let data = { "warehouseName" : arg.body.stockWarehouse }
 
                             sql.executeQuery(query, data)
                             .then(records => {
@@ -328,7 +328,7 @@ var removeProduct = (arg) => {
                         })
 
                     } else {
-                        resolve({ "message" : "Product already exist!"})
+                        resolve({ "message" : "Product is not exist!"})
                     }
     
                 }).catch(err => { 
@@ -362,12 +362,12 @@ var isApprovedAdmin = (arg) => {
             
         } else {
             return ({
-                "message" : "Access is denied! User login is not approved user."
+                "message" : "Access is denied! "+ arg.body.loginUser + " is not approved User/Admin."
             })
         }
     }).catch(err => {
         return ({
-            message: "System Error - isCheckAdmin failed " + err.message
+            message: "System Error - isCheckAdmin() failed " + err.message
         });
     })
 }

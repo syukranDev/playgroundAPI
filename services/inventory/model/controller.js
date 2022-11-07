@@ -58,6 +58,15 @@ const createProductCtrl = (arg) => {
   	});
   });
 }
+const removeProductCtrl = (arg) => {
+  return new Promise(async (resolve, reject) => {
+	inventory.removeProduct(arg).then(async function(data){
+		return resolve(utils.prepareResponse(200, "success", data));
+  	}).catch(function(catch_error){
+		return reject(catch_error);
+  	});
+  });
+}
 
 module.exports.listWarehouse = function listWarehouse(req, res) {
 	let start_benchmark = process.hrtime();
@@ -145,6 +154,24 @@ module.exports.createProduct = function createProduct(req, res) {
 	})
 	.catch(reason => {
 		printEndLogs(start_benchmark, 'createProductCtrl', reason, 'END - createProductCtrl with error');
+		return res.status(reason.statusCode).send(reason);
+	})
+};
+
+module.exports.removeProduct = function removeProduct(req, res) {
+	let start_benchmark = process.hrtime();
+	logger.info({
+		route: 'removeProductCtrl',
+		body: req.body,
+		info: 'START - removeProductCtrl'
+	});
+	return removeProductCtrl(req)
+	.then(function(results) {
+		printEndLogs(start_benchmark, 'removeProductCtrl', results, 'END - removeProductCtrl with success');
+		return res.send(results);
+	})
+	.catch(reason => {
+		printEndLogs(start_benchmark, 'removeProductCtrl', reason, 'END - removeProductCtrl with error');
 		return res.status(reason.statusCode).send(reason);
 	})
 };

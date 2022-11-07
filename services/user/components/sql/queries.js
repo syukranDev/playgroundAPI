@@ -1,6 +1,3 @@
-// const axios  = require('axios');
-const userAPI = require('../../model/user');
-// const _ = require('lodash');
 const sql = require("./index");
 // const utils = require('../utils');
 const logger = require('../logger').logger;
@@ -10,12 +7,15 @@ const bcrypt = require('bcrypt')
 
 var listUser = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
-       ///....codeGoeshere
+        const isUserApproved = await isUserApprovedByAdmin(arg)
+        const isUserAdmin = await isUserPowerUser(arg)
+
         let data = {}
         let query = `SELECT *  FROM [${config.db.database}].[dbo].[user]`
 
-       sql.executeQuery(query, data)
-			.then(records => {
+        if (isUserApproved == 1 || isUserAdmin == 1) {
+            sql.executeQuery(query, data)
+            .then(records => {
                 return resolve(records)
             }).catch(err => {
                 logger.error({
@@ -30,15 +30,19 @@ var listUser = (arg) => {
                     message: "System Error: Unable to reach listUser API."
                 });
             })
+        } else {
+            return resolve(isUserApproved)
+        }
     });
 }
 
 
 var createUser = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
-        const isUserAdmin = await isCheckAdmin(arg)
+        const isUserApproved = await isUserApprovedByAdmin(arg)
+        const isUserAdmin = await isUserPowerUser(arg)
 
-        if (arg.body.username && arg.body.password && isUserAdmin == 1) {
+        if (arg.body.username && arg.body.password && isUserAdmin == 1 || isUserApproved == 1) {
             let hashedPassword = await bcrypt.hash(arg.body.password,10)
 
             let query = `SELECT * FROM [${config.db.database}].[dbo].[user] WHERE username = @username`
@@ -59,7 +63,7 @@ var createUser = (arg) => {
                                     "username" : arg.body.username,
                                     "password" : hashedPassword,
                                     "access_level" : arg.body.access_level,
-                                    "status" : 0 //awaiting approve
+                                    "status" : 0 //intialize status=0 as awaiting approve by admin later
                                 }
                                 sql.executeQuery(query, data)
                                     .then( ()=> {
@@ -88,7 +92,7 @@ var createUser = (arg) => {
                         })
  
         } else {
-            return resolve(isUserAdmin)
+            return resolve(isUserApproved)
         }
 
     });
@@ -96,36 +100,88 @@ var createUser = (arg) => {
 
 var approveUser = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
+        const isUserApproved = await isUserApprovedByAdmin(arg)
+        const isUserAdmin = await isUserPowerUser(arg)
+
+        if (isUserApproved == 1 && isUserAdmin == 1) {
+            let query = `SELECT * FROM [${config.db.database}].[dbo].[user] WHERE username = @username AND userId = @userId AND status = 1`
+            let data = {
+                "userId" : arg.body.userId,
+                "username" : arg.body.username
+            }
+
+            sql.executeQuery(query, data)
+                .then(records => {
+                    if (records.length === 0) {
+                        let query = `UPDATE [${config.db.database}].[dbo].[user]
+                                     SET status = 1
+                                     WHERE username=@username AND userId=@userId`
+                        let data = {
+                            "userId" : arg.body.userId,
+                            "username" : arg.body.username
+                        }
+
+                        sql.executeQuery(query, data)
+                            .then(() => {
+                                resolve({
+                                    "Action" : "Approve User",
+                                    "message" : "User is approved succesfully."
+                                })
+                            })
+                        
+                    } else {
+                        resolve({
+                            "message" : "User already approved!"
+                        })
+
+                    }
+                })
+
+
+        } else {
+            resolve(isUserAdmin)
+        }
+
         
     })
 }
 
 var removeUser = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
-        const isUserApproved = await isApprovedAdmin(arg)
+        const isUserApproved = await isUserApprovedByAdmin(arg)
         const isUserAdmin = await isUserPowerUser(arg)
 
-        let query = `DELETE FROM [${config.db.database}].[dbo].[user] WHERE username=@user`
+        let query = `DELETE FROM [${config.db.database}].[dbo].[user] WHERE username=@username`
         let data = { "username" : arg.body.user}
 
         if (isUserApproved == 1 && isUserAdmin == 1) {
             sql.executeQuery(query, data)
-                .then((s) => { resolve({
+                .then(() => { resolve({
                     "Action" : "Remove User",
                     "message" : "User is removed succesfully."
+                }).catch(err => { 
+                    logger.error({
+                        path: "dbQueries/removeUser/catch",
+                        query: query,
+                        queryData: data,
+                        message: err && err.message,
+                        stack: err && err.stack
+                    })
+                    return reject({
+                        statusCode: 500,
+                        message: "System Error: Unable to reach removeUser API."
+                    });
                 })
             })
         } else {
-            resolve({
-                "Action" : "Remove User",
-                "message" : "Access denied! User login is not approved Admin"
-            })
+            resolve(isUserAdmin)
         }
+    
 
     })
 }
 
-var isCheckAdmin = (arg) => {
+var isUserApprovedByAdmin = (arg) => {
     let query = `SELECT * FROM [${config.db.database}].[dbo].[user] WHERE username=@loginUser and status=1`
     let data = { "loginUser" : arg.body.loginUser }
 
@@ -136,12 +192,12 @@ var isCheckAdmin = (arg) => {
             
         } else {
             return ({
-                "message" : "No Privilege!"
-            })
+                "message" : "Access denied! " +  arg.body.loginUser + " is not approved User/Admin."
+            });
         }
     }).catch(err => {
         return ({
-            message: "System Error - isCheckAdmin failed " + err.message
+            message: "System Error - isUserApprovedByAdmin() failed " + err.message
         });
     })
 }
@@ -157,12 +213,12 @@ var isUserPowerUser = (arg) => {
             
         } else {
             return ({
-                "message" : "No Privilege!"
+                    "message" : "Access denied! " +  arg.body.loginUser + " is not approved User/Admin."
             })
         }
     }).catch(err => {
         return ({
-            message: "System Error - isCheckAdmin failed " + err.message
+            message: "System Error - isUserPowerUser() failed " + err.message
         });
     })
 }
@@ -170,5 +226,6 @@ var isUserPowerUser = (arg) => {
 module.exports = {
     listUser :  listUser,
     createUser : createUser,
-    removeUser : removeUser
+    removeUser : removeUser,
+    approveUser : approveUser
 }

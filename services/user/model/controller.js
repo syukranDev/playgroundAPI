@@ -34,7 +34,7 @@ const approveUserCtrl = (arg) => {
 }
 const removeUserCtrl = (arg) => {
   return new Promise(async (resolve, reject) => {
-	user.createUser(arg).then(async function(data){
+	user.removeUser(arg).then(async function(data){
 		return resolve(utils.prepareResponse(200, "success", data));
   	}).catch(function(catch_error){
 		return reject(catch_error);

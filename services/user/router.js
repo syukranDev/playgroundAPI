@@ -85,7 +85,7 @@ app.get('/home', function(req, res) {
 app.use('/app/portal/', router);
 
 router.route('/user/list')
-.get((...args) => controller.listUser(...args))
+.post((...args) => controller.listUser(...args))
 
 router.route('/user/create')
 .post((...args) => controller.createUser(...args))

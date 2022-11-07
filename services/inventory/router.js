@@ -40,6 +40,6 @@ router.route('/product/add')
 .post((...args) => controller.createProduct(...args))
 
 router.route('/product/remove/')
-.get((...args) => controller.list(...args))
+.post((...args) => controller.removeProduct(...args))
 
 module.exports = app

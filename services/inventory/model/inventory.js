@@ -107,6 +107,28 @@ module.exports = class test {
         });
     });
   }
+
+  removeProduct(req){ 
+    return new Promise((resolve, reject) => {
+      return sql.removeProduct(req)
+        .then(results => {
+          logger.info({
+            path: 'removeProduct',
+            data: results
+          });  
+          return resolve(results);
+        })
+        .catch(reason => {
+          logger.error({
+            path: 'removeProduct catch',
+            info: 'removeProduct failed',
+            reason: reason
+          })
+          return reject(reason);
+        });
+    });
+  }
+
 }
 
 

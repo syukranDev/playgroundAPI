@@ -27,6 +27,16 @@ const createWarehouseCtrl = (arg) => {
   });
 }
 
+const removeWarehouseCtrl = (arg) => {
+  return new Promise(async (resolve, reject) => {
+	inventory.removeWarehouse(arg).then(async function(data){
+		return resolve(utils.prepareResponse(200, "success", data));
+  	}).catch(function(catch_error){
+		return reject(catch_error);
+  	});
+  });
+}
+
 // Controller - Product
 
 const listProductCtrl = (arg) => {
@@ -83,6 +93,24 @@ module.exports.createWarehouse = function createWarehouse(req, res) {
 	})
 	.catch(reason => {
 		printEndLogs(start_benchmark, 'createWarehouseCtrl', reason, 'END - createWarehouseCtrl with error');
+		return res.status(reason.statusCode).send(reason);
+	})
+};
+
+module.exports.removeWarehouse = function removeWarehouse(req, res) {
+	let start_benchmark = process.hrtime();
+	logger.info({
+		route: 'removeWarehouseCtrl',
+		body: req.body,
+		info: 'START - removeWarehouseCtrl'
+	});
+	return removeWarehouseCtrl(req)
+	.then(function(results) {
+		printEndLogs(start_benchmark, 'removeWarehouseCtrl', results, 'END - removeWarehouseCtrl with success');
+		return res.send(results);
+	})
+	.catch(reason => {
+		printEndLogs(start_benchmark, 'removeWarehouseCtrl', reason, 'END - removeWarehouseCtrl with error');
 		return res.status(reason.statusCode).send(reason);
 	})
 };

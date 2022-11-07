@@ -29,10 +29,7 @@ router.route('/warehouse/list')
 router.route('/warehouse/add')
 .post((...args) => controller.createWarehouse(...args))
 
-router.route('/warehouse/edit/:warehouse_id')
-.post((...args) => controller.editWarehouse(...args))
-
-router.route('/warehouse/remove/:warehouse_id')
+router.route('/warehouse/remove/')
 .get((...args) => controller.removeWarehouse(...args))
 
 // For product @ stock APIs
@@ -42,11 +39,7 @@ router.route('/product/list')
 router.route('/product/add')
 .post((...args) => controller.createProduct(...args))
 
-router.route('/product/edit/:warehouse_id')
-.post((...args) => controller.createUser(...args))
-
 router.route('/product/remove/:warehouse_id')
 .get((...args) => controller.list(...args))
-
 
 module.exports = app

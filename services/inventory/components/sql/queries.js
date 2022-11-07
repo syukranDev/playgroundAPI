@@ -109,29 +109,20 @@ var createWarehouse = (arg) => {
     });
 }
 
-// var editWarehouse = (arg) => {
-//     return promise = new Promise(async (resolve, reject) => {
-//         let data = {}
-//         let query = ``
+var removeWarehouse = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let query = `DELETE FROM [${config.db.database}].[dbo].[warehouse] WHERE warehouseName=@warehouseName`
+        let data = { "warehouseName" : arg.body.warehouseName }
 
-//         sql.executeQuery(query, data)
-// 			.then(records => {
-//                 return resolve(records)
-//             })
-//     });
-// }
-
-// var removeWarehouse = (arg) => {
-//     return promise = new Promise(async (resolve, reject) => {
-//         let data = {}
-//         let query = ``
-
-//         sql.executeQuery(query, data)
-// 			.then(records => {
-//                 return resolve(records)
-//             })
-//     });
-// }
+        sql.executeQuery(query, data)
+			.then(() => {
+                resolve({ 
+                    "Action" : "Remove Warehouse",
+                    "message" : "Warehouse is removed succesfully!"
+                })
+            })
+    });
+}
 
 //===================== Product APIs
 var listProduct = (arg) => {
@@ -259,38 +250,87 @@ var createProduct = (arg) => {
     });
 }
 
-// var editProduct = (arg) => {
-//     return promise = new Promise(async (resolve, reject) => {
-//         let data = {}
-//         let query = ``
+var removeProduct = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        let query = `SELECT * FROM [${config.db.database}].[dbo].[stock] WHERE stock_name=@stockName`
+        let data = {
+            "stockName" : arg.body.stockName
+        }
 
-//         sql.executeQuery(query, data)
-// 			.then(records => {
-//                 return resolve(records)
-//             })
-//     });
-// }
+        if (arg.body.stockName) {
+            let totalUpdatedStock = 0;
+            sql.executeQuery(query, data)
+                .then(records => {
+                    if (records.length ===0) {
+                        let query = `DELETE FROM [${config.db.database}].[dbo].[stock] 
+                                     WHERE stock_name=@stockName, stock_warehouse=@stockWarehouse`
+                        let data = {
+                            "stockName" : arg.body.stockName,
+                            "stockWarehouse" : arg.body.stockWarehouse,
+                        }
 
-// var removeProduct = (arg) => {
-//     return promise = new Promise(async (resolve, reject) => {
-//         let data = {}
-//         let query = ``
+                        sql.executeQuery(query, data)
+                        .then(() => {
+                            let query = `SELECT * FROM [${config.db.database}].[dbo].[warehouse] WHERE warehouseName=@warehouseName`
+                            let data = {"warehouseName" : arg.body.stockWarehouse}
 
-//         sql.executeQuery(query, data)
-// 			.then(records => {
-//                 return resolve(records)
-//             })
-//     });
-// }
+                            sql.executeQuery(query, data)
+                            .then(records => {
+                                totalUpdatedStock = parseInt(records[0].total_product) - 1
+
+                                let query = `UPDATE [${config.db.database}].[dbo].[warehouse] 
+                                             SET total_product = @newTotalProduct, updated_date = GETDATE()
+                                             WHERE warehouseName = @warehouseName`
+                                let data = { 
+                                    "newTotalProduct" : totalUpdatedStock,
+                                    "warehouseName" : arg.body.stockWarehouse,
+                                }
+
+                                sql.executeQuery(query, data).then(() => {
+                                    resolve({
+                                        "action" : "Removed Product",
+                                        "message" : "New product is removed and total stock in warehouse updated!"
+                                    })
+                                }).catch(err => { 
+                                    console.log(err.message)
+                                })
+
+                            }).catch(err => { 
+                                console.log(err.message)
+                            })
+
+                        }).catch(err => { 
+                            console.log(err.message)
+                        })
+
+                    } else {
+                        resolve({ "message" : "Product already exist!"})
+                    }
+    
+                }).catch(err => { 
+                    logger.error({
+                        path: "dbQueries/createProduct/catch",
+                        query: query,
+                        queryData: data,
+                        message: err && err.message,
+                        stack: err && err.stack
+                    });
+
+                    return reject({
+                        statusCode: 500,
+                        message: "System Error: Unable to reach createProduct API."
+                    });
+                })
+        }
+    });
+}
 
 module.exports = {
     listWarehouse : listWarehouse,
     createWarehouse : createWarehouse,
-    // editWarehouse :  editWarehouse,
-    // removeWarehouse : removeWarehouse,
+    removeWarehouse : removeWarehouse,
 
     listProduct : listProduct,
     createProduct : createProduct,
-    // editProduct : editProduct,
-    // removeProduct : removeProduct
+    removeProduct : removeProduct
 }

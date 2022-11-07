@@ -45,6 +45,27 @@ module.exports = class test {
     });
   }
 
+  removeWarehouse(req){ 
+    return new Promise((resolve, reject) => {
+      return sql.removeWarehouse(req)
+        .then(results => {
+          logger.info({
+            path: 'removeWarehouse',
+            data: results
+          });  
+          return resolve(results);
+        })
+        .catch(reason => {
+          logger.error({
+            path: 'removeWarehouse catch',
+            info: 'removeWarehouse failed',
+            reason: reason
+          })
+          return reject(reason);
+        });
+    });
+  }
+
   listProduct(req){ 
     return new Promise((resolve, reject) => {
       return sql.listProduct(req)

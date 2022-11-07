@@ -53,7 +53,7 @@
     - Once User become active @ (status = 1) AND role = 'Staff'), the User can use some of the API such as add/delete/remove product
       or warehouse. But the user cannot use add/remove User APIs.
     - Only both approved User with role set to 'Admin' can use this API to create new User.
-
+```
 ### Microservices - Inventory API (Warehouse and product)
 ```
 1.  API: app/portal/warehouse/list 
@@ -92,7 +92,7 @@
 [x] POST: app/portal/product/list
 [x] POST: app/portal/product/add 
 [X] POST: app/portal/product/remove
-
+```
 ### etc to do list
 ```
 [ ] Request schema body validation

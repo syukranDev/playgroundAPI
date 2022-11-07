@@ -94,7 +94,59 @@ var createUser = (arg) => {
     });
 }
 
+var approveUser = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        
+    })
+}
+
+var removeUser = (arg) => {
+    return promise = new Promise(async (resolve, reject) => {
+        const isUserApproved = await isApprovedAdmin(arg)
+        const isUserAdmin = await isUserPowerUser(arg)
+
+        let query = `DELETE FROM [${config.db.database}].[dbo].[user] WHERE username=@user`
+        let data = { "username" : arg.body.user}
+
+        if (isUserApproved == 1 && isUserAdmin == 1) {
+            sql.executeQuery(query, data)
+                .then((s) => { resolve({
+                    "Action" : "Remove User",
+                    "message" : "User is removed succesfully."
+                })
+            })
+        } else {
+            resolve({
+                "Action" : "Remove User",
+                "message" : "Access denied! User login is not approved Admin"
+            })
+        }
+
+    })
+}
+
 var isCheckAdmin = (arg) => {
+    let query = `SELECT * FROM [${config.db.database}].[dbo].[user] WHERE username=@loginUser and status=1`
+    let data = { "loginUser" : arg.body.loginUser }
+
+    return sql.executeQuery(query, data).then(res => {
+        if (res && res.length >= 1){
+            // console.log(1)
+            return 1
+            
+        } else {
+            return ({
+                "message" : "No Privilege!"
+            })
+        }
+    }).catch(err => {
+        return ({
+            message: "System Error - isCheckAdmin failed " + err.message
+        });
+    })
+}
+
+var isUserPowerUser = (arg) => {
     let query = `SELECT * FROM [${config.db.database}].[dbo].[user] WHERE username=@loginUser AND access_level='Admin' and status=1`
     let data = { "loginUser" : arg.body.loginUser }
 
@@ -118,4 +170,5 @@ var isCheckAdmin = (arg) => {
 module.exports = {
     listUser :  listUser,
     createUser : createUser,
+    removeUser : removeUser
 }

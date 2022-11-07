@@ -39,20 +39,7 @@ app.use (function (err, req, res, next){
     else next();
 });
 
-//========================================================================================== Web Paages and Auth APIs
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'static')));
-
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.set('views', __dirname);
-
-app.get('/', function(req, res) {
-	// Render login template
-	res.sendFile(path.join(__dirname + '/afront-login.html'));
-});
-
+//========================================================================================== Auth APIs
 app.post('/auth', function(req, res) {
 	if (req.body.username && req.body.password) {
 		 let query = `SELECT * FROM [${config.db.database}].[dbo].[user] WHERE username=@username AND password=@password and status=1`
@@ -85,11 +72,8 @@ app.get('/home', function(req, res) {
 	// If the user is loggedin
 	if (req.session.loggedin) {
 		// Output username
-		// res.send('Welcome back, ' + req.session.username + '!');
-		// res.sendFile(path.join(__dirname + '/afront-home.html'));
-		// res.sendFile('afront-home.html' , { root : __dirname});
-		// res.sendFile('afront-home.html' , { root : __dirname});
-		res.render('afront-home.html', { username: req.session.username })
+		res.send('Welcome back, ' + req.session.username + '!');
+		// res.render('home.html', { username: req.session.username })
 	} else {
 		// Not logged in
 		res.send('Please login to view this page!');
@@ -105,6 +89,14 @@ router.route('/user/list')
 
 router.route('/user/create')
 .post((...args) => controller.createUser(...args))
+
+router.route('/user/approve')
+.post((...args) => controller.approveUser(...args))
+
+router.route('/user/remove')
+.post((...args) => controller.removeUser(...args))
+
+
 
 
 

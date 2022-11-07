@@ -119,8 +119,9 @@ var createWarehouse = (arg) => {
 }
 
 var removeWarehouse = async (arg) => {
-    const isUserApproved = await isApprovedAdmin(arg)
     return promise = new Promise(async (resolve, reject) => {
+        const isUserApproved = await isApprovedAdmin(arg)
+
         let query = `DELETE FROM [${config.db.database}].[dbo].[warehouse] WHERE warehouseName=@warehouseName`
         let data = { "warehouseName" : arg.body.warehouseName }
         

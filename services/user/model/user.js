@@ -46,6 +46,48 @@ module.exports = class userAPI {
     });
   }
 
+  approveUser(req){ 
+    return new Promise((resolve, reject) => {
+      return sql.approveUser(req)
+        .then(results => {
+          logger.info({
+            path: 'approveUser',
+            data: results
+          });  
+          return resolve(results);
+        })
+        .catch(reason => {
+          logger.error({
+            path: 'approveUser catch',
+            info: 'approveUser failed',
+            reason: reason
+          })
+          return reject(reason);
+        });
+    });
+  }
+
+  removeUser(req){ 
+    return new Promise((resolve, reject) => {
+      return sql.removeUser(req)
+        .then(results => {
+          logger.info({
+            path: 'removeUser',
+            data: results
+          });  
+          return resolve(results);
+        })
+        .catch(reason => {
+          logger.error({
+            path: 'removeUser catch',
+            info: 'removeUser failed',
+            reason: reason
+          })
+          return reject(reason);
+        });
+    });
+  }
+
   
 }
 

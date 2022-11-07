@@ -3,6 +3,7 @@ const logger = require('../components/logger').logger;
 const sql = require('../components/sql/queries');
 
 module.exports = class userAPI {
+  
   listUser(req){ 
     return new Promise((resolve, reject) => {
       return sql.listUser(req)

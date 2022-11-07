@@ -24,7 +24,6 @@ const createUserCtrl = (arg) => {
   });
 }
 
-
 module.exports.listUser = function listUser(req, res) {
 	let start_benchmark = process.hrtime();
 	logger.info({
@@ -60,6 +59,8 @@ module.exports.createUser = function createUSer(req, res) {
 		return res.status(reason.statusCode).send(reason);
 	})
 };
+
+
 
 var printEndLogs = function(start_benchmark, route, results, info) {
 	const diff = process.hrtime(start_benchmark);

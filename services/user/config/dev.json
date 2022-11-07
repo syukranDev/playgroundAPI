@@ -16,5 +16,5 @@
           "min": 10,
           "idleTimeoutMillis": 30000
         }
-      }
+    }
 }

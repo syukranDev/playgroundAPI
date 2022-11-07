@@ -2,16 +2,16 @@
 const userAPI = require('../../model/user');
 // const _ = require('lodash');
 const sql = require("./index");
-const utils = require('../utils');
+// const utils = require('../utils');
 const logger = require('../logger').logger;
 const config = require('config');
-const { create } = require('lodash');
+// const { create } = require('lodash');
 const bcrypt = require('bcrypt')
 
 var listUser = (arg) => {
     return promise = new Promise(async (resolve, reject) => {
        ///....codeGoeshere
-        let data = { "name": "Syukran"}
+        let data = {}
         let query = `SELECT *  FROM [${config.db.database}].[dbo].[user]`
 
        sql.executeQuery(query, data)
@@ -100,7 +100,7 @@ var isCheckAdmin = (arg) => {
 
     return sql.executeQuery(query, data).then(res => {
         if (res && res.length >= 1){
-            console.log(1)
+            // console.log(1)
             return 1
             
         } else {

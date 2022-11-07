@@ -30,7 +30,7 @@ router.route('/warehouse/add')
 .post((...args) => controller.createWarehouse(...args))
 
 router.route('/warehouse/remove/')
-.get((...args) => controller.removeWarehouse(...args))
+.post((...args) => controller.removeWarehouse(...args))
 
 // For product @ stock APIs
 router.route('/product/list')

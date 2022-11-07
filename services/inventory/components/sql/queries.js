@@ -125,7 +125,7 @@ var removeWarehouse = async (arg) => {
         let query = `DELETE FROM [${config.db.database}].[dbo].[warehouse] WHERE warehouseName=@warehouseName`
         let data = { "warehouseName" : arg.body.warehouseName }
         
-        if (isUserApproved == 1) {
+        if (isUserApproved == 1 && arg.body.warehouseName) {
             sql.executeQuery(query, data)
                 .then(() => {
                     resolve({ 

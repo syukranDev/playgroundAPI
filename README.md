@@ -1,3 +1,5 @@
+## Aim : To create backend APIs (only) to cater front end dev in Warehouse/Product + User Management system.
+
 ### How to use
 ```
 1. Create local database with and import data from attached .csv

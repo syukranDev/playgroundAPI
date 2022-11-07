@@ -2,7 +2,7 @@
 
 ### How to use
 ```
-1. Create local database with and import data from attached .csv
+1. Create local mssql database with and import data from attached .csv
 2. git clone <repo link>
 3. npm i 
 4. Start microservices - User (localhost:300/app/portal/user/...)

@@ -1,4 +1,4 @@
-## Aim : To create backend APIs (only) to cater frontend dev for Warehouse/Product + User Management system development.
+## Aim : To create backend APIs (only) for Warehouse/Product + User Management system (no UI involved).
 
 ### How to use
 ```

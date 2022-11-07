@@ -1,5 +1,18 @@
 ## Aim : To create backend APIs (only) for Warehouse/Product + User Management system (no UI involved).
-
+```
+[X] As a user I can register.
+[X] As an admin i can approve registration, reject, suspend, and delete users.
+[X] As a user I can login in only after approval and do the following on a product:
+    [X] Add product
+    [X] List products
+    [X] Add warehouse
+    [X] List warehouse
+    [X] List warehouses
+    [X] Delete product
+    [X] Delete warehouse
+[X] As a user I can logout from the system (in res.send() forms since no UI developed)
+[X] As an admin i can login to manage users (in res.send() forms since no UI developed)
+```
 ### How to use
 ```
 1. Create local mssql database with and import data from attached .csv

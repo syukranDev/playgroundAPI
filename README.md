@@ -136,5 +136,6 @@
 [X] database.sql for localhost db mssql setup
 [ ] unit test tdd
 [X] screenshot response for some APIs 
+[ ] use pm2 to manage nodejs services
 ```
 

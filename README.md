@@ -103,18 +103,23 @@
     - Only both approved User with role set to 'Admin' or 'Staff' can use this API to create new User.             
 
 
+4.  API: app/portal/stock/list
+    Method: POST
+    
+5.  API: app/portal/stock/add
+    Method: POST
 
-[x] POST: app/portal/product/list
-[x] POST: app/portal/product/add 
-[X] POST: app/portal/product/remove
+6.  API: app/portal/stock/remove
+    Method: POST
+    
 ```
 ### etc to do list
 ```
 [ ] Request schema body validation
 [X] Logger for better debugging
 [X] Hash user's password
-[ ] local db .csv
+[X] database.sql for localhost db mssql setup
 [ ] unit test tdd
-[ ] screenshot response for some APIs
+[X] screenshot response for some APIs 
 ```
 

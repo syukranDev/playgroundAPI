@@ -10,7 +10,7 @@
     [X] List warehouses
     [X] Delete product
     [X] Delete warehouse
-[X] As a user I can logout from the system (in res.send() forms since no UI developed)
+[ ] As a user I can logout from the system (in res.send() forms since no UI developed)
 [X] As an admin i can login to manage users (in res.send() forms since no UI developed)
 ```
 ### How to use
@@ -30,8 +30,23 @@
 
 5. use curl or postman to test below microservices API.   
 ```
-### Microservices - User API
+### Microservices - User API & Auth API (combined)
 ```
+1. API: localhost:3000/auth 
+   Method: POST
+   Request body : {
+                    "username" : req.body.username,
+                    "password" : req.body.password
+                  }
+
+    Note:
+    - Will redirect to localhost:3000/home if theres user profile in db, output format in res.send() only due to no UI being developed.
+    - session will be saved via module express-session
+    - TODO, hashedpassword-comparing to allow/reject user to login.
+
+===============================================================================================================
+
+
 1. API: app/portal/user/list 
    Method: POST
    Request Body: {"loginUser" : "Admin"}
